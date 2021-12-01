@@ -26,29 +26,59 @@ const inputElement = (type, name, label) => {
         </div>
     `
 }
+const selectElement = (type, name, label, selectOptions) => {
+    let optionElements = "";
+    for (const option of selectOptions) {
+        optionElements += `
+            <option>${option}</option>
+        `;
+    }
+    return `
+        <div>
+            <label>${label}</label>
+            <${type} name="${name}">
+                ${optionElements}
+            </${type}>
+        </div>
+    `
+}
+
+/*
+const formElement = '<form id="form">' + inputElement("text", "firstName", "Keresztneved") + inputElement("file", "profilePicture", "Profilképed") + inputElement("email", "personalEmail", "Email címed") + inputElement("checkbox", "newsletter", "Szeretnél-e hírlevelet kapni?") + inputElement("checkbox", "terms", "Elfogadod-e a felhasználási feltételeket?") + selectElement("select", "where", "Hol hallottál rólunk?", ["internetről", "ismerőstől", "egyéb"]) + '<button>Ok</button>' + '</form>'
+*/
+
 const formElement = `
     <form id="form">
         ${inputElement("text", "firstName", "Keresztneved")}
         ${inputElement("file", "profilePicture", "Profilképed")}
         ${inputElement("email", "personalEmail", "Email címed")}
-        ${inputElement("radio", "newsletter", "Szeretnél-e hírlevelet kapni?")}
+        ${inputElement("checkbox", "newsletter", "Szeretnél-e hírlevelet kapni?")}
         ${inputElement("checkbox", "terms", "Elfogadod-e a felhasználási feltételeket?")}
+        ${selectElement("select", "where", "Hol hallottál rólunk?", ["internetről", "ismerőstől", "egyéb"])}
         <button>Ok</button>
     </form>
 `;
 
 const formSubmit = (event) => {
     event.preventDefault();
-    console.log(event);
-    event.target.classList.add("submitted");
+    // console.log(event);
+    const et = event.target;
+    et.classList.add("submitted");
+    const etValue = et.querySelector(`select[name="where"]`).value;
+    console.log(etValue);
 }
 
 const inputEvent = (event) => {
-    console.log(event.target.name);
+    // console.log(event.target.name);
     // console.log(event.target.value);
-    const fName = document.getElementsByName("firstName")[0].name;
-    console.log(fName);
-    if (event.target.name === fName) {
+    // console.log(event);
+    // const fName = document.getElementsByName("firstName")[0].name;
+    const fName = document.querySelector(`input[name="firstName"]`);
+    const tryForm = fName.closest("#form");
+    // const tryForm = event.target.closest("#form"); //ua, mint felette sor
+    console.log(tryForm);
+    // console.log(fName);
+    if (event.target.getAttribute("name") === "firstName") {
         document.getElementById("inputValueContent").innerHTML = event.target.value;
     }
 }
