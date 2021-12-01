@@ -42,10 +42,10 @@ const selectElement = (type, id, label, selectOptions) => {
         </div>
     `
 }
-const title = () => {
+const title = (titleOfForm) => {
     return `
         <h2>
-            Adatlap
+            ${titleOfForm}
         </h2>
     `
 }
@@ -55,7 +55,7 @@ const formElement = '<form id="form">' + inputElement("text", "firstName", "Kere
 
 const formElement = `
     <form id="form">
-        ${title()}
+        ${title("Adatlap")}
         ${inputElement("text", "firstName", "Keresztneved")}
         ${inputElement("file", "profilePicture", "Profilképed")}
         ${inputElement("email", "personalEmail", "Email címed")}
