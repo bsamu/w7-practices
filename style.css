@@ -107,7 +107,7 @@
   }
 
   div div {
-    line-height: 1.4rem;
+    line-height: 20px;
     padding: 0 5px 5px 5px;
     margin-bottom: 5px;
     border-radius: 5px;
@@ -132,6 +132,7 @@
   }
 
   #inputValueContent {
+    height: 30px;
     padding-top: 5px;
     margin-top: 10px;
     font-size: 20px;
