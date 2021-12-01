@@ -18,15 +18,15 @@ const functionName = () => {
 functionName();
 */
 
-const inputElement = (type, name, label) => {
+const inputElement = (type, id, label) => {
     return `
         <div>
-            <label>${label}</label>
-            <input type="${type}" name="${name}">
+            <label for="${id}">${label}</label>
+            <input type="${type}" id="${id}">
         </div>
     `
 }
-const selectElement = (type, name, label, selectOptions) => {
+const selectElement = (type, id, label, selectOptions) => {
     let optionElements = "";
     for (const option of selectOptions) {
         optionElements += `
@@ -36,19 +36,26 @@ const selectElement = (type, name, label, selectOptions) => {
     return `
         <div>
             <label>${label}</label>
-            <${type} name="${name}">
+            <${type} id="${id}">
                 ${optionElements}
             </${type}>
         </div>
     `
 }
-
+const title = () => {
+    return `
+        <h2>
+            Adatlap
+        </h2>
+    `
+}
 /*
 const formElement = '<form id="form">' + inputElement("text", "firstName", "Keresztneved") + inputElement("file", "profilePicture", "Profilképed") + inputElement("email", "personalEmail", "Email címed") + inputElement("checkbox", "newsletter", "Szeretnél-e hírlevelet kapni?") + inputElement("checkbox", "terms", "Elfogadod-e a felhasználási feltételeket?") + selectElement("select", "where", "Hol hallottál rólunk?", ["internetről", "ismerőstől", "egyéb"]) + '<button>Ok</button>' + '</form>'
 */
 
 const formElement = `
     <form id="form">
+        ${title()}
         ${inputElement("text", "firstName", "Keresztneved")}
         ${inputElement("file", "profilePicture", "Profilképed")}
         ${inputElement("email", "personalEmail", "Email címed")}
