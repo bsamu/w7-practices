@@ -22,7 +22,7 @@ const inputElement = (type, id, label) => {
     return `
         <div>
             <label for="${id}">${label}</label>
-            <input type="${type}" id="${id}">
+            <input type="${type}" id="${id}" name="${id}">
         </div>
     `
 }
@@ -36,7 +36,7 @@ const selectElement = (type, id, label, selectOptions) => {
     return `
         <div>
             <label>${label}</label>
-            <${type} id="${id}">
+            <${type} id="${id}" name="${id}">
                 ${optionElements}
             </${type}>
         </div>
