@@ -18,11 +18,12 @@ const functionName = () => {
 functionName();
 */
 
-const inputElement = (type, id, label) => {
+const inputElement = (type, id, label, req = "") => {
+    // console.log(req);
     return `
-        <div>
+        <div class="${type}">
             <label for="${id}">${label}</label>
-            <input type="${type}" id="${id}" name="${id}">
+            <input type="${type}" id="${id}" name="${id}" ${req}>
         </div>
     `
 }
@@ -53,18 +54,95 @@ const title = (titleOfForm) => {
 const formElement = '<form id="form">' + inputElement("text", "firstName", "Keresztneved") + inputElement("file", "profilePicture", "Profilképed") + inputElement("email", "personalEmail", "Email címed") + inputElement("checkbox", "newsletter", "Szeretnél-e hírlevelet kapni?") + inputElement("checkbox", "terms", "Elfogadod-e a felhasználási feltételeket?") + selectElement("select", "where", "Hol hallottál rólunk?", ["internetről", "ismerőstől", "egyéb"]) + '<button>Ok</button>' + '</form>'
 */
 
+/*
+const nameData = {
+    type: "text",
+    name: "firstName",
+    label: "Keresztneved"
+} //Így is lehet 1. inputElementet megadni
+*/
+
+const anotherFormFields = [
+    {
+        type: "text",
+        name: "street",
+        label: "Közterület neve",
+    },
+    {
+        type: "text",
+        name: "houseNumber",
+        label: "Házszám",
+    },
+    {
+        type: "number",
+        name: "zipCode",
+        label: "Irányítószám",
+    },
+    {
+        type: "text",
+        name: "city",
+        label: "Település neve",
+    }
+]
+
+const formFields = [
+    {
+        type: "text",
+        name: "firstName",
+        label: "Keresztneved"
+    },
+    {
+        type: "file",
+        name: "profilePicture",
+        label: "Profilképed"
+    },
+    {
+        type: "email",
+        name: "personalEmail",
+        label: "Email címed",
+        required: "required"
+    },
+    {
+        type: "checkbox",
+        name: "newsletter",
+        label: "Szeretnél-e hírlevelet kapni?"
+    },
+    {
+        type: "checkbox",
+        name: "terms",
+        label: "Elfogadod-e a felhasználási feltételeket?"
+    }
+]
+
+/*
 const formElement = `
     <form id="form">
         ${title("Adatlap")}
-        ${inputElement("text", "firstName", "Keresztneved")}
+        ${inputElement(nameData.type, nameData.name, nameData.label)}
         ${inputElement("file", "profilePicture", "Profilképed")}
-        ${inputElement("email", "personalEmail", "Email címed")}
+        ${inputElement("email", "personalEmail", "Email címed", "required")}
         ${inputElement("checkbox", "newsletter", "Szeretnél-e hírlevelet kapni?")}
         ${inputElement("checkbox", "terms", "Elfogadod-e a felhasználási feltételeket?")}
         ${selectElement("select", "where", "Hol hallottál rólunk?", ["internetről", "ismerőstől", "egyéb"])}
         <button>Ok</button>
     </form>
 `;
+*/
+
+const formElement = (ffs, id) => {
+    let toForm = "";
+    for (const ff of ffs) {
+        toForm += inputElement(ff.type, ff.name, ff.label, ff.required)
+    }
+    return `
+    <form id="${id}">
+        ${title("Adatlap")}
+        ${toForm}
+        ${selectElement("select", "where", "Hol hallottál rólunk?", ["internetről", "ismerőstől", "egyéb"])}
+        <button>Ok</button>
+    </form>
+`;
+}
 
 const formSubmit = (event) => {
     event.preventDefault();
@@ -88,11 +166,22 @@ const inputEvent = (event) => {
     if (event.target.getAttribute("name") === "firstName") {
         document.getElementById("inputValueContent").innerHTML = event.target.value;
     }
+
+    if (event.target.getAttribute("name") === "profilePicture") {
+        console.log(event.target.files[0].name);
+
+        const image = URL.createObjectURL(event.target.files[0]);
+        document.getElementById("inputValueContent").insertAdjacentHTML("beforeend", `
+        <img src="${image}">
+        `);
+        console.log(image);
+    }
 }
 
 function loadEvent() {
     const root = document.getElementById("root");
-    root.insertAdjacentHTML("beforeend", formElement);
+    root.insertAdjacentHTML("beforeend", formElement(formFields, "form"));
+    root.insertAdjacentHTML("beforeend", formElement(anotherFormFields, "form2"));
     root.insertAdjacentHTML("beforeend", `
         <div id="inputValueContent"></div>
     `);
