@@ -62,6 +62,50 @@ const nameData = {
 } //Így is lehet 1. inputElementet megadni
 */
 
+const processCountries = async () => {
+    const countryRes = await fetch("https://restcountries.com/v3.1/all");
+    const countryArr = await countryRes.json();
+    console.log(countryArr[0].name.official);
+    // 1. Kell egy üres tömb
+    let cOffNArr = [];
+    // 2. for ciklussal végigmenni a countryArr-on és minden ország name.officialjét üres tömbbe rakni
+    for (const iterator of countryArr) {
+        const offName = iterator.name.official;
+        cOffNArr.push(offName);
+    }
+    // for (let i = 0; i < countryArr.length; i++) {
+    //     const element = countryArr[i];
+    //     const offName = element.name.official;
+    //     cOffNArr.push(offName);
+    // }
+    console.log(cOffNArr);
+    // 3. returnolni a tömböt
+    return cOffNArr;
+    // 4. végeredmény: legördülő menüben országok listáját kapjuk
+}
+
+const temp = processCountries();
+console.log(temp);
+// processCountries();
+
+// const anotherSelectFields = {
+//     type: "select",
+//     name: "countries",
+//     label: "Ország",
+//     options: ["Canada", "Jamaica"]
+//     // options: processCountries()
+//     // options: cOffNArr
+// }
+
+const anotherSelectFields = async () => {
+    return {
+        type: "select",
+        name: "countries",
+        label: "Ország",
+        options: await processCountries()
+    }
+}
+
 const anotherFormFields = [
     {
         type: "text",
@@ -84,6 +128,13 @@ const anotherFormFields = [
         label: "Település neve",
     }
 ]
+
+const selectFields = {
+    type: "select",
+    name: "where",
+    label: "Hol hallottál rólunk?",
+    options: ["internetről", "ismerőstől", "egyéb"]
+};
 
 const formFields = [
     {
@@ -129,7 +180,7 @@ const formElement = `
 `;
 */
 
-const formElement = (ffs, id) => {
+const formElement = (ffs, id, sel) => {
     let toForm = "";
     for (const ff of ffs) {
         toForm += inputElement(ff.type, ff.name, ff.label, ff.required)
@@ -138,8 +189,8 @@ const formElement = (ffs, id) => {
     <form id="${id}">
         ${title("Adatlap")}
         ${toForm}
-        ${selectElement("select", "where", "Hol hallottál rólunk?", ["internetről", "ismerőstől", "egyéb"])}
-        <button>Ok</button>
+        ${selectElement(sel.type, sel.name, sel.label, sel.options)}
+        <button id="gomb">Ok</button>
     </form>
 `;
 }
@@ -178,10 +229,11 @@ const inputEvent = (event) => {
     }
 }
 
-function loadEvent() {
+async function loadEvent() {
+    const waitAnotherSelectFields = await anotherSelectFields();
     const root = document.getElementById("root");
-    root.insertAdjacentHTML("beforeend", formElement(formFields, "form"));
-    root.insertAdjacentHTML("beforeend", formElement(anotherFormFields, "form2"));
+    root.insertAdjacentHTML("beforeend", formElement(formFields, "form", selectFields));
+    root.insertAdjacentHTML("beforeend", formElement(anotherFormFields, "form2", waitAnotherSelectFields));
     root.insertAdjacentHTML("beforeend", `
         <div id="inputValueContent"></div>
     `);
